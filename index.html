@@ -19,17 +19,21 @@
           </div>
         </div>
         <button @click.prevent="showResult">判定結果を表示する</button>
-        <span v-if="fewAnswers">全項目に回答してください</span>
+        <div v-if="fewAnswers">全項目に回答してください</div>
+        <div v-if="errorFlag" style="color: red">（判定処理なんか間違ってる）</div>
       </form>
     </div>
 
     <div id="resule_section" v-else>
       <h2>結果</h2>
       <p>{{answers}}（結果をテスト表示）</p>
-      <p id="resultMessage">{{judgmentList[judge].statement}}</p>
-      <ul>
-        <li v-for="link of judgmentList[judge].links"><a :href="link.url">{{link.title}}</a></li>
-      </ul>
+      <p id="resultMessage">{{judgmentList[judgedNum].statement}}</p>
+      <div id="recommendInfo">
+        <p>あなたにおすすめのウェブ情報はこちら</p>
+        <ul>
+          <li v-for="link of judgmentList[judgedNum].links"><a :href="link.url">{{link.title}}</a></li>
+        </ul>
+      </div>
 
       <button @click="location.reload()">もう一度やる</button>
     </div>

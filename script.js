@@ -1,8 +1,39 @@
 PetiteVue.createApp({
   onQuiz: true, // クイズと結果の画面切り替え
   fewAnswers: false, // 全問回答されたかチェック
-
+  errorFlag: false, // 判定処理で何も選ばれていない
   answers: [], // 回答のリスト
+  judgedNum: 0, // 結果
+
+  // 配列をシャッフルするユーティリティ関数
+  // https://www.nxworld.net/js-array-shuffle.html
+  shuffle([...array]) {
+    for (let i = array.length - 1; i >= 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  },
+
+  /** 結果判定の処理 */
+  showResult() {
+    if (this.answers.length != this.quizList.length) {
+      this.fewAnswers = true;
+      return;
+    }
+    this.fewAnswers = false;
+    this.errorFlag = false;
+    this.onQuiz = false;
+
+    const n = this.judge();
+    if (n == undefined) {
+      this.errorFlag = true;
+      this.onQuiz = true;
+      return;
+    } else {
+      this.judgedNum = n;
+    }
+  },
 
   /** クイズリスト */
   quizList: [
@@ -50,25 +81,12 @@ PetiteVue.createApp({
         }
       ]
     }
+    // 続きは自分で書く
   ],
-
-  /** 結果判定の処理 */
-  showResult() {
-    if (this.answers.length != this.quizList.length) {
-      this.fewAnswers = true;
-      return;
-    }
-    this.fewAnswers = false;
-    this.onQuiz = false;
-
-    // どの結果を表示するか選ぶ処理をがんばって書く
-    this.judge = 1;
-  },
-
-  judge: 0, // 結果
 
   /** 判定結果として表示する内容 */
   judgmentList: [
+    // 判定結果 0
     {
       statement: 'あなたのパートナーは桃太郎タイプ',
       links: [
@@ -82,6 +100,7 @@ PetiteVue.createApp({
         }
       ]
     },
+    // 判定結果 1
     {
       statement: 'あなたのパートナーは猿タイプ',
       links: [
@@ -94,16 +113,39 @@ PetiteVue.createApp({
           url: 'https://zenn.dev/ojk'
         }
       ]
+    },
+    // 判定結果 2
+    {
+      statement: 'あなたはパートナーを考え直したほうがいい',
+      links: [
+        {
+          title: 'まともなパートナーの選び方',
+          url: 'https://www.google.co.jp'
+        },
+        {
+          title: 'パートナーの再教育',
+          url: 'https://zenn.dev/ojk'
+        }
+      ]
     }
+    // 続きは自分で書く
   ],
 
-  // 配列をシャッフル
-  // https://www.nxworld.net/js-array-shuffle.html
-  shuffle([...array]) {
-    for (let i = array.length - 1; i >= 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
+  /** どの結果を表示するか選ぶ処理を自力でがんばって書く */
+  judge() {
+    const ans = this.answers; // 回答結果のリスト
+    let num; // 判定結果の番号を入れる
+
+    /* ここから  */
+    if (ans[0] == '鬼' && ans[1] == 'きびだんご') {
+      num = 0;
+    } else if (ans[0] == '猿' && ans[1] == 'きびだんご') {
+      num = 1;
+    } else {
+      num = 2;
     }
-    return array;
+    /* ここまで */
+
+    return num;
   }
 }).mount();

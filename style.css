@@ -1,1 +1,7 @@
 /* デザインは自力でがんばってね */
+
+#resultMessage {
+  font-size: 1.5rem;
+  border: solid gold 0.5rem;
+  padding: 0.5rem;
+}
