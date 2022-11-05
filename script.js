@@ -35,7 +35,7 @@ PetiteVue.createApp({
     }
   },
 
-  /** クイズリスト */
+  /** ★クイズリスト★ */
   quizList: [
     // 1問目
     {
@@ -84,7 +84,7 @@ PetiteVue.createApp({
     // 続きは自分で書く
   ],
 
-  /** 判定結果として表示する内容 */
+  /** ★判定結果リスト★ */
   judgmentList: [
     // 判定結果 0
     {
@@ -131,7 +131,7 @@ PetiteVue.createApp({
     // 続きは自分で書く
   ],
 
-  /** どの結果を表示するか選ぶ処理を自力でがんばって書く */
+  /** ★判定処理★ */
   judge() {
     const ans = this.answers; // 回答結果のリスト
     let num; // 判定結果の番号を入れる
