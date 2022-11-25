@@ -1,11 +1,14 @@
 PetiteVue.createApp({
+  mode: 'top',
+  isFemale: true,
+  noData: false,
   onQuiz: true, // クイズと結果の画面切り替え
   fewAnswers: false, // 全問回答されたかチェック
   errorFlag: false, // 判定処理で何も選ばれていない
-  answers: [], // 回答のリスト
-  judgedNum: 0, // 結果
+  answers: { f: [], m: [] }, // 回答のリスト
+  coinDeg: 0, // 一致度
 
-  // 配列をシャッフルするユーティリティ関数
+  // 配列をシャッフルするユーティリティ関数（今回は使わない）
   // https://www.nxworld.net/js-array-shuffle.html
   shuffle([...array]) {
     for (let i = array.length - 1; i >= 0; i--) {
@@ -15,24 +18,83 @@ PetiteVue.createApp({
     return array;
   },
 
-  /** 結果判定の処理 */
-  showResult() {
-    if (this.answers.length != this.quizList.length) {
+  get fm() {
+    return this.isFemale ? 'f' : 'm';
+  },
+
+  beginQuiz() {
+    if (!localStorage.pms_quiz) {
+      this.noData = true;
+      return;
+    }
+    this.mode = 'quiz';
+    this.isFemale = false;
+  },
+
+  /** 結果をローカルストレージに記録 */
+  recordAnswers() {
+    if (this.answers.f.length != this.quizList.length) {
       this.fewAnswers = true;
       return;
     }
     this.fewAnswers = false;
-    this.errorFlag = false;
-    this.onQuiz = false;
 
-    const n = this.judge();
-    if (n == undefined) {
-      this.errorFlag = true;
-      this.onQuiz = true;
-      return;
+    localStorage.pms_quiz = JSON.stringify(this.answers.f);
+
+    window.confirm(
+      '回答をあなたのブラウザーに記録しました。このあとすぐに男性が回答しない場合は、トップページをブックマークしておくと便利です。'
+    );
+
+    this.noData = false;
+    this.mode = 'top';
+  },
+
+  /** ローカルストレージを削除 */
+  deleteData() {
+    delete localStorage.pms_quiz;
+    window.confirm('ブラウザーに記録していたデータを削除しました。');
+  },
+
+  /** 一致度を示すために背景色をつける */
+  addColor(n_quiz, n_opt) {
+    const ans_m = this.answers.m;
+    const ans_f = this.answers.f;
+
+    if (ans_f[n_quiz] == n_opt) {
+      if (ans_m[n_quiz] == n_opt) {
+        return { backgroundColor: 'plum' };
+      } else {
+        return { backgroundColor: 'palevioletred' };
+      }
+    } else if (ans_m[n_quiz] == n_opt) {
+      return { backgroundColor: 'cornflowerblue' };
     } else {
-      this.judgedNum = n;
+      return { backgroundColor: 'transparent' };
     }
+  },
+
+  /** 結果判定の処理 */
+  showResult() {
+    if (this.answers.m.length != this.quizList.length) {
+      this.fewAnswers = true;
+      return;
+    }
+    this.fewAnswers = false;
+
+    this.answers.f = JSON.parse(localStorage.pms_quiz);
+    const ans_m = this.answers.m;
+    const ans_f = this.answers.f;
+
+    let sum = 0;
+    for (let i = 0; i < this.quizList.length; i += 1) {
+      if (ans_m[i] == ans_f[i]) {
+        sum += 1;
+      }
+    }
+    this.coinDeg = (sum / this.quizList.length) * 100;
+
+    this.mode = 'result';
+    window.scroll({ top: 0, behavior: 'smooth' });
   },
 
   /** ★クイズリスト★ */
@@ -40,46 +102,12 @@ PetiteVue.createApp({
     // 1問目
     {
       statement: '桃太郎の家来じゃないのは誰？', // クイズの文章
-      options: [
-        {
-          statement: '鬼だよ', // 選択肢の文章
-          value: '鬼' // 選択肢の文章が長いときには回答は短くできる
-        },
-        {
-          statement: '犬だよ',
-          value: '犬'
-        },
-        {
-          statement: '猿だよ',
-          value: '猿'
-        },
-        {
-          statement: '雉だよ',
-          value: '雉'
-        }
-      ]
+      options: ['鬼だよ', '犬だよ', '猿だよ', '雉だよ'] // 選択肢
     },
     // 2問目
     {
       statement: '桃太郎が家来たちにあげたのは何？',
-      options: [
-        {
-          statement: 'きびだんご',
-          value: 'きびだんご'
-        },
-        {
-          statement: 'どろだんご',
-          value: 'どろだんご'
-        },
-        {
-          statement: 'みたらしだんご',
-          value: 'みたらしだんご'
-        },
-        {
-          statement: 'つみれだんご',
-          value: 'つみれだんご'
-        }
-      ]
+      options: ['きびだんご', 'どろだんご', 'みたらしだんご', 'つみれだんご']
     }
     // 続きは自分で書く
   ],
@@ -129,23 +157,5 @@ PetiteVue.createApp({
       ]
     }
     // 続きは自分で書く
-  ],
-
-  /** ★判定処理★ */
-  judge() {
-    const ans = this.answers; // 回答結果のリスト
-    let num; // 判定結果の番号を入れる
-
-    /* ここから  */
-    if (ans[0] == '鬼' && ans[1] == 'きびだんご') {
-      num = 0;
-    } else if (ans[0] == '猿' && ans[1] == 'きびだんご') {
-      num = 1;
-    } else {
-      num = 2;
-    }
-    /* ここまで */
-
-    return num;
-  }
+  ]
 }).mount();
