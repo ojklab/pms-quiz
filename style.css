@@ -10,6 +10,21 @@
   padding: 0.5rem;
 }
 
+#recommendInfo {
+  font-size: 1rem;
+}
+
+.result {
+  border: solid plum 0.5em;
+  padding: 1rem;
+  margin-top: 2em;
+}
+
+.result span {
+  color: firebrick;
+  font-weight: bold;
+}
+
 h1 {
   background-color: plum;
   line-height: 1;
@@ -68,14 +83,4 @@ small {
 .nodata {
   border: solid gold 0.5em;
   padding: 1rem;
-}
-
-.result {
-  border: solid gold 0.5em;
-  padding: 1rem;
-}
-
-.result span {
-  color: firebrick;
-  font-weight: bold;
 }

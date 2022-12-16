@@ -4,14 +4,14 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>大切な人の月経時・PMS時の状態を知っていますか？</title>
+    <title>大切な人の月経時の状態を知っていますか？</title>
     <link href="style.css" rel="stylesheet" />
   </head>
-  <body>
+  <body @vue:mounted="init">
     <div v-if="mode == 'top'">
-      <h1>大切な人の月経時・PMS時の状態を知っていますか？</h1>
+      <h1>大切な人の月経時の状態を知っていますか？</h1>
       <p>
-        このアプリの目的は、女性の月経時・PMS時の状態を診断して有益な情報へのリンクを提供するとともに、身近な男性に大切な人（女性）の月経・PMS症状の程度を知ってもらうことです。
+        このアプリの目的は、女性の月経時の状態を診断して有益な情報へのリンクを提供するとともに、身近な男性に大切な人（女性）の月経・PMS症状の程度を知ってもらうことです。
       </p>
       <p>
         まず女性がアンケートに回答し、そのあと、<span class="marker">同じブラウザーを使って</span
@@ -28,14 +28,14 @@
     <div v-else-if="mode == 'quiz'">
       <template v-if="isFemale">
         <h1 class="female">
-          あなたの月経時・PMS時の状態診断アンケート<br />
+          あなたの月経時の状態診断アンケート<br />
           <span>for Female</span>
         </h1>
         <p>あなた自身の症状や状態について、相手からどのように見えていると思うか回答してください。</p>
       </template>
       <template v-else>
         <h1 class="male">
-          大切な人の月経時・PMS時の状態推定クイズ<br />
+          大切な人の月経時の状態推定クイズ<br />
           <span>for Male</span>
         </h1>
         <p>このクイズに回答するよう依頼された女性について、当てはまると思うものを選んでください。</p>
@@ -59,21 +59,24 @@
 
     <div id="resule_section" v-else>
       <h1>結果</h1>
+      <div id="resultMessage">
+        {{judgmentList[judgedNum].statement}}
+        <div id="recommendInfo">
+          あなたとパートナーにおすすめのウェブ情報はこちら
+          <ul>
+            <li v-for="link of judgmentList[judgedNum].links"><a :href="link.url">{{link.title}}</a></li>
+          </ul>
+        </div>
+      </div>
+
       <div class="result">ふたりの一致度は<span>【{{coinDeg}}％】</span>でした。</div>
+
       <div class="question" v-for="(q, i) of quizList">
         <p>第{{i+1}}問：{{q.statement}}</p>
         <ul>
           <li class="options" :style="addColor(i, j)" v-for="(opt, j) of q.options">{{opt}}</li>
         </ul>
       </div>
-
-      <!-- <p id="resultMessage">{{judgmentList[judgedNum].statement}}</p>
-      <div id="recommendInfo">
-        <p>あなたにおすすめのウェブ情報はこちら</p>
-        <ul>
-          <li v-for="link of judgmentList[judgedNum].links"><a :href="link.url">{{link.title}}</a></li>
-        </ul>
-      </div> -->
 
       <button id="deleteData" @click="deleteData">回答データを削除する</button>
     </div>
