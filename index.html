@@ -4,14 +4,14 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>大切な人のPMS症状を知っていますか？</title>
+    <title>大切な人の月経時・PMS時の状態を知っていますか？</title>
     <link href="style.css" rel="stylesheet" />
   </head>
   <body>
     <div v-if="mode == 'top'">
-      <h1>大切な人のPMS度を知っていますか？</h1>
+      <h1>大切な人の月経時・PMS時の状態を知っていますか？</h1>
       <p>
-        このアプリの目的は、女性のPMS度を診断して有益な情報へのリンクを提供するとともに、身近な男性に大切な人（女性）のPMSの程度を知ってもらうことです。
+        このアプリの目的は、女性の月経時・PMS時の状態を診断して有益な情報へのリンクを提供するとともに、身近な男性に大切な人（女性）の月経・PMS症状の程度を知ってもらうことです。
       </p>
       <p>
         まず女性がアンケートに回答し、そのあと、<span class="marker">同じブラウザーを使って</span
@@ -28,14 +28,14 @@
     <div v-else-if="mode == 'quiz'">
       <template v-if="isFemale">
         <h1 class="female">
-          あなたのPMS度診断アンケート<br />
+          あなたの月経時・PMS時の状態診断アンケート<br />
           <span>for Female</span>
         </h1>
         <p>あなた自身の症状や状態について、相手からどのように見えていると思うか回答してください。</p>
       </template>
       <template v-else>
         <h1 class="male">
-          大切な人のPMS度推定クイズ<br />
+          大切な人の月経時・PMS時の状態推定クイズ<br />
           <span>for Male</span>
         </h1>
         <p>このクイズに回答するよう依頼された女性について、当てはまると思うものを選んでください。</p>
