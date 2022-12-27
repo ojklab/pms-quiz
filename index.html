@@ -11,7 +11,7 @@
     <div v-if="mode == 'top'">
       <h1>大切な人の月経時の状態を知っていますか？</h1>
       <p>
-        このアプリの目的は、女性の月経時の状態を診断して有益な情報へのリンクを提供するとともに、身近な男性に大切な人（女性）の月経・PMS症状の程度を知ってもらうことです。
+        このアプリの目的は、女性の月経時の状態を診断して有益な情報へのリンクを提供するとともに、身近な男性に大切な人（女性）の月経症状の程度を知ってもらうことです。
       </p>
       <p>
         まず女性がアンケートに回答し、そのあと、<span class="marker">同じブラウザーを使って</span
@@ -32,6 +32,7 @@
           <span>for Female</span>
         </h1>
         <p>あなた自身の症状や状態について、相手からどのように見えていると思うか回答してください。</p>
+        <P class="p-color">※問題文は、「問１:男性用の問題文（ 女性用の問題文 ）」という構造になっています。</P>
       </template>
       <template v-else>
         <h1 class="male">
@@ -39,6 +40,7 @@
           <span>for Male</span>
         </h1>
         <p>このクイズに回答するよう依頼された女性について、当てはまると思うものを選んでください。</p>
+        <P class="p-color">※問題文は、「問１:男性用の問題文（ 女性用の問題文 ）」という構造になっています。</P>
       </template>
       <div id="quiz_section" v-if="onQuiz">
         <form>
@@ -64,7 +66,7 @@
         <div id="recommendInfo">
           あなたとパートナーにおすすめのウェブ情報はこちら
           <ul>
-            <li v-for="link of judgmentList[judgedNum].links"><a :href="link.url">{{link.title}}</a></li>
+            <li v-for="link of judgmentList[judgedNum].links"><a :href="link.url" target="_blank">{{link.title}}</a></li>
           </ul>
         </div>
       </div>
